@@ -9,15 +9,31 @@ a {
     text-decoration: none;
 }
 
+nav {
+    border-bottom: 4px ridge darkgrey;
+}
+
 nav li {
     display: inline-flex;
-    margin: 0 5%;
-    justify-items: right;
-    justify-content: right;
+    margin: 5px 5%;
     border: 2px dashed transparent;
+    align-content: space-around;
 }
 
 nav li:hover {
     border: 2px solid gray;
     box-shadow: 2px 2px 2px black;
+}
+
+h3 {
+    margin: 30px auto 5px 10%;
+}
+
+p {
+    margin: 0;
+    margin-top: 5px;
+}
+
+caption {
+    padding-top: 25px;
 }
