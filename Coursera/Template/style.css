@@ -1,0 +1,23 @@
+html {
+    background-color: lightgray;
+    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    color: midnightblue;
+}
+
+a {
+    color: darkblue;
+    text-decoration: none;
+}
+
+nav li {
+    display: inline-flex;
+    margin: 0 5%;
+    justify-items: right;
+    justify-content: right;
+    border: 2px dashed transparent;
+}
+
+nav li:hover {
+    border: 2px solid gray;
+    box-shadow: 2px 2px 2px black;
+}
