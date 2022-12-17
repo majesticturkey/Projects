@@ -1,0 +1,40 @@
+html {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    background-color: black;
+    text-align: center;
+    color: white;
+}
+
+#header h1{
+    font-weight: normal;
+    font-size: 50px;
+}
+
+a {
+    color: aquamarine;
+    font-size: 16px;
+}
+
+embed {
+    height: auto;
+    width: auto;
+}
+
+img {
+    display: block;
+    margin: 10px auto;
+}
+
+#main h3 {
+    font-weight: 300;
+    font-size: 42px;
+}
+
+p {
+    font-size: 21px;
+    color: gray;
+}
+
+#footer {
+    text-align: right;
+}
