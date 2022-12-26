@@ -41,3 +41,25 @@ const invert = pad => {
         drumPad[i] = !drumPad[i];
     }
 }
+
+const getNeighborPads = (x, y, size) => {
+    if (x < 0 || x >= size || y < 0 || y >= size || size < 0) {
+        return [];
+    }
+    if (x === 0 && y === 0) {
+        return [[x + 1, y],[x, y + 1]];
+    } else if (x === 0) {
+        return [[x + 1, y], [x, y + 1], [x, y - 1]];
+    } else if (y === 0) {
+        return [[x - 1, y], [x, y + 1], [x + 1, y]];
+    } else if (x === size - 1 && y === size - 1) {
+        return [[x - 1, y], [x, y - 1]];
+    } else if (x === size - 1) {
+        return [[x - 1, y], [x, y - 1], [x, y + 1]];
+    } else if (y === size - 1) {
+        return [[x + 1, y], [x, y - 1], [x - 1, y]];
+    }
+    else {
+        return [[x - 1, y], [x, y + 1], [x + 1, y], [x, y - 1]];
+    }
+}
