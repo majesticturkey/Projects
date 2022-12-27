@@ -2,7 +2,9 @@
 let database = {
   users: {},
   articles: {},
-  nextArticleId: 1
+  comments: {},
+  nextArticleId: 1,
+  nextCommentId: 1
 };
 
 const routes = {
@@ -26,6 +28,21 @@ const routes = {
   },
   '/articles/:id/downvote': {
     'PUT': downvoteArticle
+  },
+  '/comments': {
+    //'GET': getComments,
+    'POST': createComment
+  },
+  '/comments/:id': {
+   // 'GET': getComment,
+   // 'PUT': updateComment,
+   // 'DELETE': deleteComment
+  },
+  '/comments/:id/upvote': {
+   // 'PUT': upvoteComment
+  },
+  '/comments/:id/downvote': {
+   // 'PUT': downvoteComment
   }
 };
 
@@ -92,6 +109,20 @@ function getArticles(url, request) {
   return response;
 }
 
+function getComments(url, request) {
+  const response = {};
+
+  response.status = 200;
+  response.body = {
+    comments: Object.keys(database.comments)
+      .map(commentId => database.comments[commentId])
+      .filter(comment => comment)
+      .sort((comment1, comment2) => comment2.id - comment1.id)
+  };
+
+  return response;
+}
+
 function getArticle(url, request) {
   const id = Number(url.split('/').filter(segment => segment)[1]);
   const article = database.articles[id];
@@ -105,6 +136,33 @@ function getArticle(url, request) {
     response.status = 200;
   } else if (id) {
     response.status = 404;
+  } else {
+    response.status = 400;
+  }
+
+  return response;
+}
+
+function createComment(url, request) {;
+  const response = {};
+  requestComment = request.body && request.body.comment;
+  if (requestComment && requestComment.body &&
+    requestComment.articleId && database.articles[requestComment.articleId] &&
+    requestComment.username && database.users[requestComment.username]) {
+    const comment = {
+      id: database.nextCommentId++,
+      body: requestComment.body,
+      username: requestComment.username,
+      articleId: requestComment.articleId,
+      upvotedBy: [],
+      downvotedBy: []
+   };
+    database.comments[comment.id] = comment;
+    database.users[comment.username].commentIds.push(comment.id);
+    database.articles[comment.articleId].commentIds.push(comment.id);
+
+    response.body = {comment: comment};
+    response.status = 201;
   } else {
     response.status = 400;
   }
