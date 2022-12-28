@@ -34,7 +34,7 @@ const routes = {
   },
   '/comments/:id': {
    'PUT': updateComment,
-   // 'DELETE': deleteComment
+   'DELETE': deleteComment
   },
   '/comments/:id/upvote': {
    // 'PUT': upvoteComment
@@ -221,6 +221,10 @@ function deleteArticle(url, request) {
     response.status = 204;
   } else {
     response.status = 400;
+  }
+
+  function deleteComment(url, request) {
+    const id = Number(url.split('/').filter(segment => segment)[1]);
   }
 
   return response;
