@@ -37,7 +37,7 @@ const routes = {
    'DELETE': deleteComment
   },
   '/comments/:id/upvote': {
-   // 'PUT': upvoteComment
+   'PUT': upvoteComment
   },
   '/comments/:id/downvote': {
    // 'PUT': downvoteComment
@@ -223,8 +223,21 @@ function deleteArticle(url, request) {
     response.status = 400;
   }
 
-  function deleteComment(url, request) {
-    const id = Number(url.split('/').filter(segment => segment)[1]);
+  return response;
+}
+
+function deleteComment(url, request) {
+  const id = Number(url.split('/').filter(segment => segment)[1]);
+  const savedComment = database.comments[id];
+  let response = {};
+  if (savedComment) {
+    const commentArticle = database.comments[id].articleId;
+    database.comments[id] = null;
+    database.users[savedComment.username].commentIds.splice(database.users[savedComment.username].commentIds.indexOf(id),1);
+    database.articles[commentArticle].commentIds.splice(database.articles[commentArticle].commentIds.indexOf(id),1);
+    response.status = 204;
+  } else {
+    response.status = 404;
   }
 
   return response;
@@ -245,6 +258,24 @@ function upvoteArticle(url, request) {
     response.status = 400;
   }
 
+  return response;
+}
+
+function upvoteComment(url, request) {
+  const id = Number(url.split('/').filter(segment => segment)[1]);
+  const username = request.body && request.body.username;
+  let savedComment = database.comments[id];
+  const response = {};
+
+  if (savedComment && database.users[username]) {
+    savedComment = upvote(savedComment, username);
+
+    response.body = {comment: savedComment};
+    response.status = 200;
+  } else {
+    response.status = 400;
+  }
+  
   return response;
 }
 
