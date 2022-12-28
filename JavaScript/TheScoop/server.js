@@ -35,7 +35,7 @@ const routes = {
   },
   '/comments/:id': {
    // 'GET': getComment,
-   // 'PUT': updateComment,
+   'PUT': updateComment,
    // 'DELETE': deleteComment
   },
   '/comments/:id/upvote': {
@@ -296,6 +296,23 @@ function downvote(item, username) {
     item.downvotedBy.push(username);
   }
   return item;
+}
+
+function updateComment(url, request){
+  const id = Number(url.split('/').filter(segment => segment)[1]);
+  let savedComment = database.comments[id];
+  const targetComment = request.body && request.body.comment;
+  const response = {};
+  if (!id || !targetComment) {
+    response.status = 400;
+  } else if (!savedComment) {
+    response.status = 404;
+  } else {
+    savedComment.body = targetComment.body || savedComment.body;
+    response.body = {savedComment};
+    response.status = 200;
+  }
+  return response;
 }
 
 // Write all code above this line.
