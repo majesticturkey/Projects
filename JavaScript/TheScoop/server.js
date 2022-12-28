@@ -30,11 +30,9 @@ const routes = {
     'PUT': downvoteArticle
   },
   '/comments': {
-    //'GET': getComments,
     'POST': createComment
   },
   '/comments/:id': {
-   // 'GET': getComment,
    'PUT': updateComment,
    // 'DELETE': deleteComment
   },
@@ -104,20 +102,6 @@ function getArticles(url, request) {
         .map(articleId => database.articles[articleId])
         .filter(article => article)
         .sort((article1, article2) => article2.id - article1.id)
-  };
-
-  return response;
-}
-
-function getComments(url, request) {
-  const response = {};
-
-  response.status = 200;
-  response.body = {
-    comments: Object.keys(database.comments)
-      .map(commentId => database.comments[commentId])
-      .filter(comment => comment)
-      .sort((comment1, comment2) => comment2.id - comment1.id)
   };
 
   return response;
