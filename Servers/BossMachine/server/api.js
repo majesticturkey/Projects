@@ -8,4 +8,8 @@ app.get('/minions/', (req, res, next) => {
     next();
 });
 
+app.post('/minions/', (req, res, next) => {
+    let newMinion = db.createMinion(req.body.id, req.body.name, req.body.title, req.body.weaknesses, req.body.salary);
+});
+
 module.exports = apiRouter;
