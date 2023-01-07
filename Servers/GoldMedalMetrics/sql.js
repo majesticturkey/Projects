@@ -104,7 +104,14 @@ won the most medals, along with the number of medals aliased to 'count'.
 */
 
 const bestEvent = country => {
-  return countryBestWithCount('event', country);;
+  return countryBestWithCount('event', country);
+};
+
+const numberGenderMedalists = (gender, country) => {
+  if (['Men', 'Women'].includes(gender)) {
+    return `SELECT COUNT(DISTINCT name) FROM GoldMedal WHERE country = '${country}' AND gender = '${gender}';`;
+  }
+  return null;
 };
 
 /*
@@ -112,15 +119,14 @@ Returns a SQL query string that will find the number of male medalists.
 */
 
 const numberMenMedalists = country => {
-  return;
-};
-
+  return numberGenderMedalists('Men', country);
+}
 /*
 Returns a SQL query string that will find the number of female medalists.
 */
 
 const numberWomenMedalists = country => {
-  return;
+  return numberGenderMedalists('Women', country);
 };
 
 /*
@@ -128,7 +134,7 @@ Returns a SQL query string that will find the athlete with the most medals.
 */
 
 const mostMedaledAthlete = country => {
-  return;
+  return `SELECT name FROM GoldMedal WHERE country = '${country}' GROUP BY name ORDER BY COUNT(*) DESC LIMIT 1;`;
 };
 
 /*
@@ -137,7 +143,13 @@ optionally ordered by the given field in the specified direction.
 */
 
 const orderedMedals = (country, field, sortAscending) => {
-  return;
+  let sort = '';
+  if (sortAscending === true) {
+    sort = `ORDER BY ${field} ASC`;
+  } else if (sortAscending === false) {
+    sort = `ORDER BY ${field} DESC`;
+  }
+  return `SELECT * FROM GoldMedal WHERE country = '${country}' ${sort}`;
 };
 
 /*
@@ -148,7 +160,15 @@ aliased as 'percent'. Optionally ordered by the given field in the specified dir
 */
 
 const orderedSports = (country, field, sortAscending) => {
-  return;
+  let sort = '';
+  if (field){
+  if (sortAscending){
+    sort = `ORDER BY ${field} ASC;`;
+  } else if (!sortAscending){
+    sort = `ORDER BY ${field} DESC;`;
+  }
+}
+  return `SELECT sport, COUNT(sport) AS count, (COUNT(sport) * 100 / (SELECT COUNT(*) FROM GoldMedal WHERE country = '${country}')) AS percent FROM GoldMedal WHERE country = '${country}' GROUP BY sport ${sort}`;
 };
 
 module.exports = {
