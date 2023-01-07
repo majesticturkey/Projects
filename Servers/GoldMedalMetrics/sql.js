@@ -39,13 +39,20 @@ const goldMedalNumber = country => {
   return `SELECT COUNT(*) AS count FROM GoldMedal WHERE country = '${country}';`;
 };
 
+const mostSeasonWins = (season, country) => {
+  if (['Summer', 'Winter'].includes(season)) {
+    return `SELECT year, COUNT(*) AS count FROM GoldMedal WHERE country = '${country}' AND season = '${season}' GROUP BY year ORDER BY COUNT(*) DESC LIMIT 1;`;
+  }
+  return null;
+};
+
 /*
 Returns a SQL query string that will find the year where the given country 
 won the most summer medals, along with the number of medals aliased to 'count'.
 */
 
 const mostSummerWins = country => {
-  return `SELECT year, COUNT(*) AS count FROM GoldMedal WHERE country = ${country} AND season = 'summer' GROUP BY year ORDER BY COUNT(*) DESC LIMIT 1;`;
+  return mostSeasonWins('Summer', country);
 };
 
 /*
@@ -54,7 +61,14 @@ won the most winter medals, along with the number of medals aliased to 'count'.
 */
 
 const mostWinterWins = country => {
-  return `SELECT year, COUNT(*) AS count FROM GoldMedal WHERE country = ${country} AND season = 'winter' GROUP BY year ORDER BY COUNT(*) DESC LIMIT 1;`;
+  return mostSeasonWins('Winter', country);
+};
+
+const countryBestWithCount = (bestThing, country) => {
+  if (['year', 'discipline', 'sport', 'event'].includes(bestThing)) {
+    return `SELECT ${bestThing}, COUNT(*) AS count FROM GoldMedal WHERE country = '${country}' GROUP BY ${bestThing} ORDER BY COUNT(*) DESC LIMIT 1;`;
+  }
+  return null;
 };
 
 /*
@@ -63,7 +77,7 @@ won the most medals, along with the number of medals aliased to 'count'.
 */
 
 const bestYear = country => {
-  return `SELECT year, COUNT(*) AS count FROM GoldMedal WHERE country = ${country} GROUP BY year ORDER BY COUNT(*) LIMIT 1;`;
+  return countryBestWithCount('year', country);
 };
 
 /*
@@ -72,7 +86,7 @@ won the most medals, along with the number of medals aliased to 'count'.
 */
 
 const bestDiscipline = country => {
-  return `SELECT discipline, COUNT(*) AS count FROM GoldMedal WHERE country = ${country} GROUP BY discipline ORDER BY COUNT(*) LIMIT 1;`;
+  return countryBestWithCount('discipline', country);
 };
 
 /*
@@ -81,7 +95,7 @@ won the most medals, along with the number of medals aliased to 'count'.
 */
 
 const bestSport = country => {
-  return `SELECT sport, COUNT(*) AS count FROM GoldMedal WHERE country = ${country} GROUP BY 1 ORDER BY 2 LIMIT 1;`;
+  return countryBestWithCount('sport', country);
 };
 
 /*
@@ -90,7 +104,7 @@ won the most medals, along with the number of medals aliased to 'count'.
 */
 
 const bestEvent = country => {
-  return;
+  return countryBestWithCount('event', country);;
 };
 
 /*
